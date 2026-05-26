@@ -4,6 +4,10 @@ import PackageDescription
 let package = Package(
     name: "macos-native-utils-swift",
     products: [
+        .executable(
+            name: "macapps",
+            targets: ["MacOSNativeUtils"]
+        ),
         .library(
             name: "MacOSNativeUtils",
             targets: ["MacOSNativeUtils"]
