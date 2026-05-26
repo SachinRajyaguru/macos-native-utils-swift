@@ -72,6 +72,15 @@ func run(
     return lines
 }
 
+func filterHelperApps(_ apps: [String]) -> [String] {
+    return apps.filter { app in
+        !app.contains("Helper") &&
+        !app.contains("Renderer") &&
+        !app.contains("Updater") &&
+        !app.contains("Plugin")
+    }
+}
+
 let commands: [(String, String, [String])] = [
     (
         "find_apps",
@@ -151,11 +160,19 @@ log("TOTAL COMMANDS -> \(commands.count)")
 log("======================================")
 
 for (name, path, args) in commands {
-    results[name] = run(
+    var output = run(
         name: name,
         launchPath: path,
         arguments: args
     )
+    
+    // Filter out helper apps for application inventory commands
+    if name == "find_apps" {
+        output = filterHelperApps(output)
+        log("FILTERED APPS -> \(output.count) apps after removing helpers")
+    }
+    
+    results[name] = output
 }
 
 log("ENCODING JSON OUTPUT")
